@@ -216,7 +216,7 @@ export const nodes = [
     id: 'st-root',
     type: 'mindNode',
     position: { x: 610, y: OFFSET_Y },
-    data: { label: 'Statement in English', subtitle: 'Como a oração funciona em inglês', icon: '📝', color: '#0369a1', bgColor: '#f0f9ff', isRoot: true, badge: 'base', content: md.root },
+    data: { label: 'Statement in English', subtitle: 'Como a oração funciona em inglês', icon: '📝', color: '#0369a1', bgColor: '#f0f9ff', isRoot: true, badge: 'base', categoryId: 'estrutura', content: md.root },
   },
   {
     id: 'st-svo',

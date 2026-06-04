@@ -182,7 +182,7 @@ export const nodes = [
     id: 'da-root',
     type: 'mindNode',
     position: { x: 565, y: OFFSET_Y },
-    data: { label: 'Despite & Although', subtitle: 'Contraste com atitudes diferentes', icon: '⚖️', color: '#ea580c', bgColor: '#fff7ed', isRoot: true, badge: 'conector', content: md.root },
+    data: { label: 'Despite & Although', subtitle: 'Contraste com atitudes diferentes', icon: '⚖️', color: '#ea580c', bgColor: '#fff7ed', isRoot: true, badge: 'conector', categoryId: 'conector', content: md.root },
   },
   {
     id: 'da-despite',

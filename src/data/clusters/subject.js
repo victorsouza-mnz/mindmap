@@ -224,7 +224,7 @@ export const nodes = [
     id: 'sub-root',
     type: 'mindNode',
     position: { x: 610, y: OFFSET_Y },
-    data: { label: 'Sujeito em Inglês', subtitle: 'Identificação e tipos de sujeito', icon: '🎯', color: '#7c3aed', bgColor: '#f5f3ff', isRoot: true, badge: 'base', content: md.root },
+    data: { label: 'Sujeito em Inglês', subtitle: 'Identificação e tipos de sujeito', icon: '🎯', color: '#7c3aed', bgColor: '#f5f3ff', isRoot: true, badge: 'base', categoryId: 'sintaxe', content: md.root },
   },
   {
     id: 'sub-simple',

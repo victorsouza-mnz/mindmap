@@ -144,12 +144,12 @@ export default function App() {
   }, [])
 
   const handleFormConfirm = useCallback((formData) => {
-    const { label, subtitle, icon, color, bgColor, content, badge } = formData
+    const { label, subtitle, icon, color, bgColor, content, badge, categoryId } = formData
 
     if (formState.editNodeId) {
       setNodes(nds => nds.map(n => {
         if (n.id !== formState.editNodeId) return n
-        return { ...n, data: { ...n.data, label, subtitle, icon, color, bgColor, content, badge } }
+        return { ...n, data: { ...n.data, label, subtitle, icon, color, bgColor, content, badge, categoryId } }
       }))
       setEdges(eds => eds.map(e => {
         if (e.source === formState.editNodeId || e.target === formState.editNodeId) {
@@ -158,7 +158,7 @@ export default function App() {
         return e
       }))
       if (selectedNode?.id === formState.editNodeId) {
-        setSelectedNode(prev => prev ? { ...prev, data: { ...prev.data, label, subtitle, icon, color, bgColor, content, badge } } : prev)
+        setSelectedNode(prev => prev ? { ...prev, data: { ...prev.data, label, subtitle, icon, color, bgColor, content, badge, categoryId } } : prev)
       }
       showToast(`"${label}" atualizado!`)
       closeForm()
@@ -173,7 +173,7 @@ export default function App() {
         id,
         type: 'mindNode',
         position: { x: 600, y: maxY + 250 },
-        data: { label, subtitle, icon, color, bgColor, isRoot: true, badge, content },
+        data: { label, subtitle, icon, color, bgColor, isRoot: true, badge, categoryId, content },
       }
       setNodes(nds => {
         const updated = [...nds, newNode]

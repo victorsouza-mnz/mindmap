@@ -23,8 +23,9 @@ function buildInitialForm(initialData, mode) {
     badge: initialData.badge ?? 'cluster',
   }
   if (mode === 'cluster') {
-    const matched = CLUSTER_TYPES.find(ct => ct.color === initialData.color)
-    return { ...base, colorIdx: 0, clusterTypeId: matched?.id ?? CLUSTER_TYPES[0].id }
+    const byId    = CLUSTER_TYPES.find(ct => ct.id    === initialData.categoryId)
+    const byColor = CLUSTER_TYPES.find(ct => ct.color === initialData.color)
+    return { ...base, colorIdx: 0, clusterTypeId: (byId ?? byColor ?? CLUSTER_TYPES[0]).id }
   }
   const colorIdx = COLORS.findIndex(c => c.color === initialData.color)
   return { ...base, colorIdx: colorIdx >= 0 ? colorIdx : 0, clusterTypeId: CLUSTER_TYPES[0].id }
@@ -43,16 +44,17 @@ export default function NodeForm({ mode, parentLabel, initialData, onConfirm, on
     e.preventDefault()
     if (!form.label.trim()) return
 
-    let color, bgColor, badge
+    let color, bgColor, badge, categoryId
     if (isCluster) {
       const ct = CLUSTER_TYPES.find(t => t.id === form.clusterTypeId) ?? CLUSTER_TYPES[0]
-      color = ct.color
-      bgColor = ct.bgColor
-      badge = ct.badge
+      color      = ct.color
+      bgColor    = ct.bgColor
+      badge      = ct.badge
+      categoryId = ct.id
     } else {
-      color = COLORS[form.colorIdx].color
+      color   = COLORS[form.colorIdx].color
       bgColor = COLORS[form.colorIdx].bgColor
-      badge = form.badge || 'cluster'
+      badge   = form.badge || 'cluster'
     }
 
     onConfirm({
@@ -63,6 +65,7 @@ export default function NodeForm({ mode, parentLabel, initialData, onConfirm, on
       bgColor,
       content: form.content,
       badge,
+      categoryId,
     })
   }
 
@@ -121,7 +124,7 @@ export default function NodeForm({ mode, parentLabel, initialData, onConfirm, on
             {/* Tipo (só cluster) */}
             {isCluster ? (
               <div className="form-field">
-                <label>Tipo de Cluster</label>
+                <label>Categoria</label>
                 <div className="form-cluster-types">
                   {CLUSTER_TYPES.map(ct => (
                     <button

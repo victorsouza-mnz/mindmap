@@ -259,7 +259,7 @@ export const nodes = [
     id: 'ing',
     type: 'mindNode',
     position: { x: 705, y: 20 },
-    data: { label: 'ING', subtitle: 'sufixo do verbo', icon: '✨', color: '#6366f1', bgColor: '#eef2ff', isRoot: true, badge: 'sufixo', content: md.ing },
+    data: { label: 'ING', subtitle: 'sufixo do verbo', icon: '✨', color: '#6366f1', bgColor: '#eef2ff', isRoot: true, badge: 'sufixo', categoryId: 'gramatical', content: md.ing },
   },
   {
     id: 'gerund-hub',

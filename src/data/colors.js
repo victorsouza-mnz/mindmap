@@ -14,7 +14,7 @@ export const COLORS = [
 export const CLUSTER_TYPES = [
   {
     id: 'gramatical',
-    label: 'Base Gramatical',
+    label: 'Gramática',
     description: 'Estruturas, regras e padrões',
     icon: '📐',
     color: '#6366f1',
@@ -38,5 +38,32 @@ export const CLUSTER_TYPES = [
     color: '#10b981',
     bgColor: '#d1fae5',
     badge: 'vocabulário',
+  },
+  {
+    id: 'conector',
+    label: 'Conectores',
+    description: 'Conjunções, contraste e conectivos',
+    icon: '🔗',
+    color: '#ea580c',
+    bgColor: '#fff7ed',
+    badge: 'conector',
+  },
+  {
+    id: 'estrutura',
+    label: 'Estrutura Oracional',
+    description: 'Como a oração é construída',
+    icon: '🏗️',
+    color: '#0369a1',
+    bgColor: '#f0f9ff',
+    badge: 'estrutura',
+  },
+  {
+    id: 'sintaxe',
+    label: 'Sintaxe',
+    description: 'Sujeito, objeto e funções sintáticas',
+    icon: '🎯',
+    color: '#7c3aed',
+    bgColor: '#f5f3ff',
+    badge: 'sintaxe',
   },
 ]
