@@ -50,7 +50,7 @@ export default function App() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(allEdges)
   const [selectedNode, setSelectedNode] = useState(null)
   const [toast, setToast] = useState(null)
-  const [formState, setFormState] = useState({ open: false, mode: 'card', parentId: null })
+  const [formState, setFormState] = useState({ open: false, mode: 'card', parentId: null, editNodeId: null })
   const fileInputRef = useRef(null)
 
   const showToast = useCallback((msg, type = 'success') => {
@@ -122,19 +122,49 @@ export default function App() {
 
   /* ── criar nó ────────────────────────────── */
   const openAddCard = useCallback((parentId) => {
-    setFormState({ open: true, mode: 'card', parentId })
+    setFormState({ open: true, mode: 'card', parentId, editNodeId: null })
   }, [])
 
   const openCreateCluster = useCallback(() => {
-    setFormState({ open: true, mode: 'cluster', parentId: null })
+    setFormState({ open: true, mode: 'cluster', parentId: null, editNodeId: null })
   }, [])
 
+  const openEditNode = useCallback((nodeId) => {
+    setNodes(nds => {
+      const node = nds.find(n => n.id === nodeId)
+      if (!node) return nds
+      const mode = node.data.isRoot ? 'cluster' : 'card'
+      setFormState({ open: true, mode, parentId: null, editNodeId: nodeId })
+      return nds
+    })
+  }, [setNodes])
+
   const closeForm = useCallback(() => {
-    setFormState({ open: false, mode: 'card', parentId: null })
+    setFormState({ open: false, mode: 'card', parentId: null, editNodeId: null })
   }, [])
 
   const handleFormConfirm = useCallback((formData) => {
     const { label, subtitle, icon, color, bgColor, content, badge } = formData
+
+    if (formState.editNodeId) {
+      setNodes(nds => nds.map(n => {
+        if (n.id !== formState.editNodeId) return n
+        return { ...n, data: { ...n.data, label, subtitle, icon, color, bgColor, content, badge } }
+      }))
+      setEdges(eds => eds.map(e => {
+        if (e.source === formState.editNodeId || e.target === formState.editNodeId) {
+          return { ...e, style: { ...e.style, stroke: color } }
+        }
+        return e
+      }))
+      if (selectedNode?.id === formState.editNodeId) {
+        setSelectedNode(prev => prev ? { ...prev, data: { ...prev.data, label, subtitle, icon, color, bgColor, content, badge } } : prev)
+      }
+      showToast(`"${label}" atualizado!`)
+      closeForm()
+      return
+    }
+
     const id = `node-${crypto.randomUUID()}`
 
     if (formState.mode === 'cluster') {
@@ -182,14 +212,38 @@ export default function App() {
     }
 
     closeForm()
-  }, [formState, nodes, edges, setNodes, setEdges, closeForm, showToast])
+  }, [formState, nodes, edges, selectedNode, setNodes, setEdges, closeForm, showToast])
+
+  /* ── deletar selecionados ────────────────── */
+  const selectedNodeIds = useMemo(
+    () => new Set(nodes.filter(n => n.selected).map(n => n.id)),
+    [nodes]
+  )
+
+  const handleDeleteSelected = useCallback(() => {
+    const ids = new Set(nodes.filter(n => n.selected).map(n => n.id))
+    if (ids.size === 0) return
+    if (!confirm(`Deletar ${ids.size} card${ids.size > 1 ? 's' : ''} selecionado${ids.size > 1 ? 's' : ''}?`)) return
+    setNodes(nds => {
+      const updated = nds.filter(n => !ids.has(n.id))
+      savePositions(updated)
+      return updated
+    })
+    setEdges(eds => eds.filter(e => !ids.has(e.source) && !ids.has(e.target)))
+    if (selectedNode && ids.has(selectedNode.id)) setSelectedNode(null)
+    showToast(`${ids.size} card${ids.size > 1 ? 's' : ''} deletado${ids.size > 1 ? 's' : ''}`)
+  }, [nodes, selectedNode, setNodes, setEdges, showToast])
 
   /* ── context value (memoized) ─────────────── */
-  const ctxValue = useMemo(() => ({ openAddCard, openCreateCluster }), [openAddCard, openCreateCluster])
+  const ctxValue = useMemo(() => ({ openAddCard, openCreateCluster, openEditNode }), [openAddCard, openCreateCluster, openEditNode])
 
-  /* ── parent label for form ────────────────── */
+  /* ── parent label / edit data for form ───── */
   const parentLabel = formState.parentId
     ? nodes.find(n => n.id === formState.parentId)?.data?.label
+    : null
+
+  const editNodeData = formState.editNodeId
+    ? nodes.find(n => n.id === formState.editNodeId)?.data ?? null
     : null
 
   return (
@@ -206,6 +260,12 @@ export default function App() {
             <button className="app-header__btn app-header__btn--new" onClick={openCreateCluster}>
               ＋ Novo Cluster
             </button>
+
+            {selectedNodeIds.size > 0 && (
+              <button className="app-header__btn app-header__btn--danger" onClick={handleDeleteSelected}>
+                🗑 Deletar ({selectedNodeIds.size})
+              </button>
+            )}
 
             <input ref={fileInputRef} type="file" accept=".json,application/json" style={{ display: 'none' }} onChange={handleFileChange} />
             <button className="app-header__btn" onClick={() => fileInputRef.current.click()}>
@@ -247,7 +307,16 @@ export default function App() {
             <MiniMap nodeColor={(n) => n.data.color} maskColor={dark ? 'rgba(15,23,42,0.7)' : 'rgba(240,244,248,0.7)'} pannable zoomable />
           </ReactFlow>
 
-          <MarkdownPanel node={selectedNode} onClose={closePanel} />
+          <MarkdownPanel
+            node={selectedNode}
+            onClose={closePanel}
+            onUpdateContent={(nodeId, content) => {
+              setNodes(nds => nds.map(n =>
+                n.id === nodeId ? { ...n, data: { ...n.data, content } } : n
+              ))
+              setSelectedNode(prev => prev ? { ...prev, data: { ...prev.data, content } } : prev)
+            }}
+          />
 
           {toast && <div className={`toast toast--${toast.type}`}>{toast.msg}</div>}
         </div>
@@ -256,6 +325,7 @@ export default function App() {
           <NodeForm
             mode={formState.mode}
             parentLabel={parentLabel}
+            initialData={editNodeData}
             onConfirm={handleFormConfirm}
             onCancel={closeForm}
           />

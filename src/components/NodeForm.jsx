@@ -13,9 +13,27 @@ const DEFAULT = {
   badge: 'cluster',
 }
 
-export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
-  const [form, setForm] = useState(DEFAULT)
+function buildInitialForm(initialData, mode) {
+  if (!initialData) return DEFAULT
+  const base = {
+    label: initialData.label ?? '',
+    subtitle: initialData.subtitle ?? '',
+    icon: initialData.icon ?? '📌',
+    content: initialData.content ?? '',
+    badge: initialData.badge ?? 'cluster',
+  }
+  if (mode === 'cluster') {
+    const matched = CLUSTER_TYPES.find(ct => ct.color === initialData.color)
+    return { ...base, colorIdx: 0, clusterTypeId: matched?.id ?? CLUSTER_TYPES[0].id }
+  }
+  const colorIdx = COLORS.findIndex(c => c.color === initialData.color)
+  return { ...base, colorIdx: colorIdx >= 0 ? colorIdx : 0, clusterTypeId: CLUSTER_TYPES[0].id }
+}
+
+export default function NodeForm({ mode, parentLabel, initialData, onConfirm, onCancel }) {
+  const [form, setForm] = useState(() => buildInitialForm(initialData, mode))
   const [editorOpen, setEditorOpen] = useState(false)
+  const isEdit = !!initialData
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }))
 
@@ -58,9 +76,11 @@ export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
 
           <div className="form-modal__header">
             <h2 className="form-modal__title">
-              {isCluster ? '✨ Novo Cluster' : '➕ Novo Card'}
+              {isEdit
+                ? (isCluster ? '✏️ Editar Cluster' : '✏️ Editar Card')
+                : (isCluster ? '✨ Novo Cluster' : '➕ Novo Card')}
             </h2>
-            {!isCluster && parentLabel && (
+            {!isCluster && !isEdit && parentLabel && (
               <span className="form-modal__parent">em "{parentLabel}"</span>
             )}
             <button className="form-modal__close" onClick={onCancel}>✕</button>
@@ -143,23 +163,17 @@ export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
 
             {/* Conteúdo */}
             <div className="form-field">
-              <div className="form-label-row">
-                <label>Conteúdo <span className="form-label-hint">(Markdown)</span></label>
-                <button
-                  type="button"
-                  className="form-expand-btn"
-                  onClick={() => setEditorOpen(true)}
-                >
-                  ⛶ Abrir editor
-                </button>
-              </div>
-              <textarea
-                className="form-textarea"
-                placeholder={`# ${form.label || 'Título'}\n\nEscreva o conteúdo em Markdown...`}
-                value={form.content}
-                onChange={e => set('content', e.target.value)}
-                rows={5}
-              />
+              <label>Conteúdo <span className="form-label-hint">(Markdown)</span></label>
+              <button
+                type="button"
+                className="form-content-btn"
+                onClick={() => setEditorOpen(true)}
+              >
+                {form.content
+                  ? <span className="form-content-preview">{form.content.substring(0, 120)}{form.content.length > 120 ? '…' : ''}</span>
+                  : <span className="form-content-empty">✏ Clique para adicionar conteúdo…</span>
+                }
+              </button>
             </div>
 
             <div className="form-modal__footer">
@@ -171,7 +185,7 @@ export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
                 className="form-btn form-btn--confirm"
                 style={{ background: selectedColor }}
               >
-                {isCluster ? 'Criar Cluster' : 'Criar Card'}
+                {isEdit ? 'Salvar' : (isCluster ? 'Criar Cluster' : 'Criar Card')}
               </button>
             </div>
 
@@ -183,6 +197,7 @@ export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
         <MDEditorOverlay
           value={form.content}
           icon={form.icon}
+          label={form.label || (isCluster ? 'Cluster' : 'Card')}
           color={selectedColor}
           onApply={(content, icon) => {
             set('content', content)
