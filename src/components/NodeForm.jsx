@@ -19,6 +19,8 @@ export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
 
   const set = (key, val) => setForm(f => ({ ...f, [key]: val }))
 
+  const isCluster = mode === 'cluster'
+
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!form.label.trim()) return
@@ -46,7 +48,6 @@ export default function NodeForm({ mode, parentLabel, onConfirm, onCancel }) {
     })
   }
 
-  const isCluster = mode === 'cluster'
   const selectedClusterType = CLUSTER_TYPES.find(t => t.id === form.clusterTypeId) ?? CLUSTER_TYPES[0]
   const selectedColor = isCluster ? selectedClusterType.color : COLORS[form.colorIdx].color
 

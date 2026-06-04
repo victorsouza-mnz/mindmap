@@ -45,6 +45,7 @@ function savePositions(nodes) {
 }
 
 export default function App() {
+  const [dark, toggleDark] = useDarkMode()
   const [nodes, setNodes] = useNodesState(loadNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(allEdges)
   const [selectedNode, setSelectedNode] = useState(null)
@@ -216,6 +217,9 @@ export default function App() {
             <button className="app-header__btn app-header__btn--ghost" onClick={resetPositions}>
               ↺ Reset
             </button>
+            <button className="app-header__btn app-header__btn--theme" onClick={toggleDark} title="Alternar tema">
+              {dark ? '☀️' : '🌙'}
+            </button>
           </div>
         </header>
 
@@ -238,9 +242,9 @@ export default function App() {
             multiSelectionKeyCode="Shift"
             onContextMenu={(e) => e.preventDefault()}
           >
-            <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color="#cbd5e1" />
+            <Background variant={BackgroundVariant.Dots} gap={24} size={1.5} color={dark ? '#334155' : '#cbd5e1'} />
             <Controls showInteractive={false} />
-            <MiniMap nodeColor={(n) => n.data.color} maskColor="rgba(240,244,248,0.7)" pannable zoomable />
+            <MiniMap nodeColor={(n) => n.data.color} maskColor={dark ? 'rgba(15,23,42,0.7)' : 'rgba(240,244,248,0.7)'} pannable zoomable />
           </ReactFlow>
 
           <MarkdownPanel node={selectedNode} onClose={closePanel} />

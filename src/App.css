@@ -673,6 +673,79 @@ body {
   transform: scale(1.15);
 }
 
+/* ─── Cluster type selector ────────────────────────────── */
+
+.form-cluster-types {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-cluster-type {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.form-cluster-type:hover {
+  border-color: var(--ct-color);
+  background: var(--ct-bg);
+}
+
+.form-cluster-type--active {
+  border-color: var(--ct-color);
+  background: var(--ct-bg);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ct-color) 18%, transparent);
+}
+
+.form-cluster-type__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ct-color);
+  flex-shrink: 0;
+}
+
+.form-cluster-type__icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.form-cluster-type__info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+
+.form-cluster-type__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ct-color);
+  line-height: 1.2;
+}
+
+.form-cluster-type__desc {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.form-cluster-type__check {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ct-color);
+  flex-shrink: 0;
+}
+
 .form-modal__footer {
   display: flex;
   justify-content: flex-end;
@@ -715,6 +788,10 @@ body {
   flex: 1;
   position: relative;
   overflow: hidden;
+}
+
+.react-flow {
+  background: var(--bg-page);
 }
 
 /* ─── Nodes ────────────────────────────────────────────── */
