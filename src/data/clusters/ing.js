@@ -64,8 +64,10 @@ O gerúndio é o **verbo + -ing** funcionando como **substantivo** dentro da fra
 
 Muitos verbos em inglês são seguidos diretamente de outro verbo no **-ing**.
 
+Neste caso, o verbo-ing é sempre o **objeto** da frase — há um sujeito explícito que pratica a ação do primeiro verbo.
+
 ## Estrutura
-\`verb + another verb-ING\`
+\`sujeito + verbo + verbo-ING (objeto)\`
 
 ## Verbos comuns
 
@@ -75,10 +77,12 @@ consider, continue, keep, suggest, miss, love, resist, recommend, mention, enjoy
 
 ## Exemplos
 
-- I **like driving**. – Eu gosto de dirigir.
-- She **keeps making** the same mistake.
-- I **recommend trying** the restaurant downtown.
-- He **quit smoking** last year.
+| Sujeito | Verbo | Objeto (-ing) |
+|---------|-------|---------------|
+| **I** | like | **driving** |
+| **She** | keeps | **making** the same mistake |
+| **I** | recommend | **trying** the restaurant downtown |
+| **He** | quit | **smoking** last year |
 
 ## ⚠️ Obrigatórios: enjoy e dislike
 
@@ -118,44 +122,46 @@ O **"to"** normalmente transforma o verbo em infinitivo — mas em algumas expre
 | She decided **to stay**. | I'm used **to staying** up late. |
 `,
 
-  asSubject: `# Sujeito ou Objeto da Frase
+  asSubject: `# Como Sujeito da Frase
 
-O verbo-ing pode ser tanto o **sujeito** quanto o **objeto** da frase.
+O verbo-ing pode ser o próprio **sujeito** da frase — quem "executa" a ação do ponto de vista gramatical é o gerúndio em si.
 
-## A regra
+Isso acontece quando não há pronome ou substantivo antes do -ing assumindo esse papel. O verbo-ing vira um substantivo que responde à pergunta "quem/o que faz isso?".
 
-| Situação | Papel do -ing | Exemplo |
-|----------|---------------|---------|
-| Sem sujeito explícito | **Sujeito** | **Flying** makes me nervous. |
-| Com sujeito explícito | **Objeto** | I **like programming**. |
-
-## Como sujeito
+## Exemplos simples
 
 - **Flying** makes me nervous. – Voar me deixa nervoso.
 - **Learning** English is not as hard as you think.
 - **Reading** before bed helps me sleep.
 
-## Como objeto
+## Frases mais complexas
 
-- I **like programming**. – Eu gosto de programar.
-- She **enjoys cooking**. – Ela gosta de cozinhar.
+O gerúndio como sujeito pode aparecer em orações subordinadas e em paralelo:
+
+> I'm tired because **doing** my final project and **programming** at the same time is hard and exhausting.
+
+Separando as orações:
+
+\`\`\`
+I'm tired
+  ↳ oração principal
+
+because doing my final project and programming at the same time is hard and exhausting
+  ↳ oração subordinada (motivo)
+\`\`\`
+
+Dentro da oração subordinada, **doing** e **programming** são os sujeitos de "is hard and exhausting" — dois gerúndios em paralelo exercendo a função de sujeito.
 
 ## Comparação com o português
 
+No português o infinitivo assume esse papel naturalmente:
+
 \`\`\`
-I like programming.
-→ Eu gosto de programar.   (verbo em português)
-→ Eu gosto de programação. (substantivo em português)
+Voar me deixa nervoso.   → Flying makes me nervous.
+Nadar é saudável.        → Swimming is healthy.
 \`\`\`
 
-O inglês usa o mesmo **-ing** para os dois casos.
-
-## Cuidado com o contexto
-
-> **I like programming but I have never coded.**
-> – Eu gosto de programação, mas nunca escrevi código.
-
-"programming" aqui refere-se ao campo/conceito — o -ing como objeto pode ter essa ambiguidade.
+Em inglês, o infinitivo (*to fly*, *to swim*) também é possível, mas soa mais formal. O **-ing** é a forma natural no inglês falado e escrito.
 `,
 
   afterGo: `# Representando Atividades
@@ -231,7 +237,7 @@ Algumas expressões do inglês **sempre** usam gerúndio. Memorize como blocos!
 
 ## Com "have"
 
-- I had **difficulty finding** a parking spot.
+- I had **a blast meeting** everyone at the party.
 - We had **fun playing** board games.
 - She had **trouble sleeping** last night.
 
@@ -277,7 +283,7 @@ export const nodes = [
     id: 'after-verbs',
     type: 'mindNode',
     position: { x: 240, y: 370 },
-    data: { label: 'Junto de Verbos', subtitle: 'verb + another verb-ING', icon: '⚡', color: '#f59e0b', bgColor: '#fef3c7', content: md.afterVerbs },
+    data: { label: 'Junto de Verbos como Objeto', subtitle: 'verb + verb-ING', icon: '⚡', color: '#f59e0b', bgColor: '#fef3c7', content: md.afterVerbs },
   },
   {
     id: 'after-prep',
@@ -289,7 +295,7 @@ export const nodes = [
     id: 'as-subject',
     type: 'mindNode',
     position: { x: 680, y: 370 },
-    data: { label: 'Sujeito ou Objeto', subtitle: 'Depende do sujeito explícito', icon: '🏆', color: '#8b5cf6', bgColor: '#ede9fe', content: md.asSubject },
+    data: { label: 'Como Sujeito', subtitle: '-ing como sujeito da oração', icon: '🏆', color: '#8b5cf6', bgColor: '#ede9fe', content: md.asSubject },
   },
   {
     id: 'after-go',

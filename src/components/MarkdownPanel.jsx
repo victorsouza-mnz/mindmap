@@ -49,7 +49,7 @@ export default function MarkdownPanel({ node, onClose, onUpdateContent }) {
     <>
       <div className="panel-backdrop" onClick={onClose} />
       <aside
-        className={`panel panel--${side}`}
+        className={`panel panel--${side}${editing ? ' panel--editing' : ''}`}
         style={{ borderTop: `4px solid ${color}` }}
       >
         <div className="panel__header" style={{ background: bgColor }}>
